@@ -21,12 +21,47 @@
 
 	<script src="wrapper.js"></script>
 	<script>
+	// Generate random integer within range:
+	// var die = getRandomInt(1,6);
+	function getRandomInt(min, max) {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+	function sumArray(array) {
+		var sum = 0;
+		for (var i = 0, l = array.length; i < l; i++) sum += array[i];
+		return sum;
+	}
+
+	function randomColor() {
+		var rgb = [1,1,1].map(getRandomInt.bind(null, 0, 255));
+		return {
+			background: 'rgb(' + rgb.join() + ')',
+			foreground: sumArray(rgb) > (255 * 3) / 2 ? 'black' : 'white'
+		}
+	}
+
 	var parent = document.querySelector('.wrapper');
 
+	var globals = Object.keys(window);
+	var widths = globals.map(function() {
+		return getRandomInt(300, 800);
+	});
+	var heights = globals.map(function() {
+		return getRandomInt(32, 1200);
+	}).sort(function(a, b) {
+		return b - a;
+	});
+
 	// create an element for each global variable name
-	var cells = Object.keys(window).map(function(key) {
+	var cells = globals.map(function(key, i) {
 		var div = document.createElement('div');
 		div.textContent = key;
+		var color = randomColor();
+		div.style.width = widths[i] + 'px';
+		div.style.height = heights[i] + 'px';
+		div.style.backgroundColor = color.background;
+		div.style.color = color.foreground;
 		return div;
 	});
 
@@ -34,8 +69,8 @@
 	var wrapper = new Wrapper({
 		parent: parent,
 		cells: cells,
-		cellWidth: 300,
-		cellHeight: 32
+		cellWidth: widths,
+		cellHeight: heights
 	});
 
 	// append cells to parent
