@@ -3,7 +3,7 @@
 
 	var wrapper = new Wrapper({
 		parent: element in document (required),
-		cells: array (required),
+		cells: collection of elements (required),
 		cellWidth: number (in pixels; required),
 		cellHeight: number (in pixels; required),
 		numCols: number (optional),
